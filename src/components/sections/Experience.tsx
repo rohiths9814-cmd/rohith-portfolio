@@ -102,33 +102,35 @@ export default function Experience() {
 
         {/* ─────────────────────────────────────────────────────
             MOBILE LAYOUT  (< md)
-            Single-column, timeline line on the left edge
+            Single-column with left accent border per card
         ───────────────────────────────────────────────────── */}
         <div className="relative md:hidden">
-          {/* Vertical line — left edge */}
-          <div className="absolute left-[9px] top-0 bottom-0 w-px bg-dark-border overflow-hidden">
+          {/* Continuous vertical track */}
+          <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-dark-border overflow-hidden rounded-full">
             <motion.div
               className="w-full bg-gradient-to-b from-cyber-green via-cyber-blue to-neon-purple"
               initial={{ height: 0 }}
               animate={inView ? { height: "100%" } : {}}
-              transition={{ duration: 2, ease: "easeInOut", delay: 0.3 }}
+              transition={{ duration: 2.2, ease: "easeInOut", delay: 0.3 }}
             />
           </div>
 
           {experience.map((item, i) => (
             <motion.div
               key={`mob-${i}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.15 + i * 0.1, duration: 0.45 }}
-              className="relative flex items-start gap-4 mb-7 last:mb-0 pl-8"
+              initial={{ opacity: 0, x: -16 }}
+              animate={inView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.2 + i * 0.12, duration: 0.45 }}
+              className="relative flex items-stretch gap-4 mb-6 last:mb-0 pl-10"
             >
-              {/* Dot */}
-              <div className="absolute left-0 top-3">
-                <TimelineDot />
+              {/* Dot — centred on the track */}
+              <div className="absolute left-1.5 top-5 -translate-x-1/2">
+                <div className="w-4 h-4 rounded-full bg-dark-base border-2 border-cyber-green flex items-center justify-center shadow-cyber z-10">
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyber-green" />
+                </div>
               </div>
 
-              {/* Card — full width */}
+              {/* Card */}
               <div className="w-full">
                 <TimelineCard item={item} i={i} inView={inView} />
               </div>
