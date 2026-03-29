@@ -44,13 +44,13 @@ export const skills = {
 export const projects = [
   {
     id: 1,
-    title: "VulnScanner Pro",
+    title: "WiFi Security Scanner",
     description:
-      "Automated vulnerability scanning tool that chains Nmap, Nikto, and custom exploit checks into a single automated pipeline. Detects OWASP Top 10 vulnerabilities with detailed reporting.",
-    tech: ["Python", "Nmap", "Nikto", "SQLite", "Flask"],
-    tags: ["Automation", "Recon", "OWASP"],
-    github: "https://github.com/rohiths9814-cmd",
-    demo: null,
+      "Developed a WiFi scanning tool to identify nearby wireless networks and analyze their security configurations. The tool detects SSIDs, signal strength, and encryption types (WEP/WPA/WPA2), helping assess network security posture.",
+    tech: ["Python", "Networking"],
+    tags: ["WiFi", "Recon", "Network Security", "Wireless Security"],
+    github: "https://github.com/rohiths9814-cmd/wifi_scanner_mini_project.git",
+    demo: "https://drive.google.com/drive/folders/1oIZbHqatznShHdV8GaLr19CGhOzV3LJ5?usp=sharing",
     featured: true,
     color: "cyber-green",
   },
