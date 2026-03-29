@@ -33,11 +33,11 @@ export const skills = {
     { name: "C/C++", level: 70 },
   ],
   tools: [
+    { name: "Kali linux", level: 20},
     { name: "Burp Suite", level: 90 },
-    { name: "Nmap / Masscan", level: 70 },
+    { name: "Nmap", level: 70 },
     { name: "Metasploit", level: 50 },
     { name: "Wireshark", level: 70 },
-    { name: "SQLMap / ffuf", level: 10 },
   ],
 };
 
