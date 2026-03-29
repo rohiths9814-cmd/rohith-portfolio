@@ -27,9 +27,9 @@ export const skills = {
     { name: "Python", level: 90 },
     { name: "Java", level: 90},
     { name: "OOPS", level: 50},
-    { name: "Bash/Shell", level: 50 },
-    { name: "JavaScript", level: 50 },
-    { name: "SQL", level: 50 },
+    { name: "Bash/Shell", level: 20},
+    { name: "JavaScript", level: 30 },
+    { name: "SQL", level: 40 },
     { name: "C/C++", level: 70 },
   ],
   tools: [
@@ -99,10 +99,18 @@ export const experience = [
   {
     year: "2025",
     title: "Cybersecurity Bootcamp",
-    org: "Self-Directed / Udemy / YouTube",
+    org: "Self-Directed / YouTube / AI",
     description:
       "Completed comprehensive ethical hacking curriculum covering networking, web app security, exploit development, and OSCP-prep material.",
     type: "education",
+  },
+  {
+    year: "Sep 2025",
+    title: "CyberX Workshop — VIT Vellore",
+    org: "VIT Vellore",
+    description:
+      "Participated in a hands-on cybersecurity workshop covering Wi-Fi attacks, Evil Twin scenarios, and security tools. Gained practical exposure using ESP8266 and cyber lab environments.",
+    type: "achievement",
   },
   {
     year: "2025",
