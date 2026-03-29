@@ -4,21 +4,29 @@ import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { experience } from "@/data/portfolio";
 
+/* ── Type metadata ─────────────────────────────────────────── */
 const TYPE_ICONS: Record<string, string> = {
   achievement: "🏆",
-  platform: "🖥️",
-  education: "🎓",
+  platform:    "🖥️",
+  education:   "🎓",
   competition: "⚔️",
 };
 
 const TYPE_COLORS: Record<string, string> = {
-  achievement: "border-cyber-green bg-cyber-green/10 text-cyber-green",
-  platform: "border-cyber-blue bg-cyber-blue/10 text-cyber-blue",
-  education: "border-neon-purple bg-neon-purple/10 text-neon-purple",
-  competition: "border-neon-pink bg-neon-pink/10 text-neon-pink",
+  achievement: "border-cyber-green  bg-cyber-green/10  text-cyber-green",
+  platform:    "border-cyber-blue   bg-cyber-blue/10   text-cyber-blue",
+  education:   "border-neon-purple  bg-neon-purple/10  text-neon-purple",
+  competition: "border-neon-pink    bg-neon-pink/10    text-neon-pink",
 };
 
-/** Shared card content — used in both mobile and desktop layouts */
+const DOT_COLORS: Record<string, string> = {
+  achievement: "#00ff88",
+  platform:    "#00d4ff",
+  education:   "#bf5af2",
+  competition: "#ff2d78",
+};
+
+/* ── Shared card ───────────────────────────────────────────── */
 function TimelineCard({
   item,
   i,
@@ -29,8 +37,8 @@ function TimelineCard({
   inView: boolean;
 }) {
   return (
-    <div className="glass-card rounded-xl p-4 md:p-5">
-      {/* Type badge + year */}
+    <div className="glass-card rounded-xl p-4">
+      {/* Badge row */}
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <span
           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-mono border ${TYPE_COLORS[item.type]}`}
@@ -45,7 +53,7 @@ function TimelineCard({
         {item.title}
       </h3>
 
-      {/* Org + marks badge */}
+      {/* Org + marks */}
       <div className="flex flex-wrap items-center gap-2 mb-2">
         <p className="text-cyber-green text-xs font-mono">{item.org}</p>
         {"marks" in item && item.marks && (
@@ -69,22 +77,29 @@ function TimelineCard({
   );
 }
 
-/** Glowing dot for timeline */
-function TimelineDot() {
+/* ── Desktop centre dot ─────────────────────────────────────── */
+function TimelineDot({ color = "#00ff88" }: { color?: string }) {
   return (
-    <div className="w-5 h-5 rounded-full bg-dark-base border-2 border-cyber-green flex items-center justify-center shadow-cyber z-10 flex-shrink-0">
-      <div className="w-2 h-2 rounded-full bg-cyber-green" />
+    <div
+      className="w-5 h-5 rounded-full bg-dark-base border-2 flex items-center justify-center z-10 flex-shrink-0"
+      style={{ borderColor: color, boxShadow: `0 0 10px ${color}60` }}
+    >
+      <div className="w-2 h-2 rounded-full" style={{ background: color }} />
     </div>
   );
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   Main section
+═══════════════════════════════════════════════════════════════ */
 export default function Experience() {
-  const ref = useRef(null);
+  const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
     <section id="journey" className="section-padding" ref={ref}>
       <div className="container-custom">
+
         {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -100,50 +115,84 @@ export default function Experience() {
           </h2>
         </motion.div>
 
-        {/* ─────────────────────────────────────────────────────
+        {/* ═══════════════════════════════════════════════════════
             MOBILE LAYOUT  (< md)
-            Single-column with left accent border per card
-        ───────────────────────────────────────────────────── */}
-        <div className="relative md:hidden">
-          {/* Continuous vertical track */}
-          <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-dark-border overflow-hidden rounded-full">
-            <motion.div
-              className="w-full bg-gradient-to-b from-cyber-green via-cyber-blue to-neon-purple"
-              initial={{ height: 0 }}
-              animate={inView ? { height: "100%" } : {}}
-              transition={{ duration: 2.2, ease: "easeInOut", delay: 0.3 }}
-            />
-          </div>
+            Two-column: [40px gutter | flex-1 card]
+            The gutter holds the dot+track so they NEVER overlap
+        ═══════════════════════════════════════════════════════ */}
+        <div className="md:hidden">
+          {experience.map((item, i) => {
+            const dotColor = DOT_COLORS[item.type] ?? "#00ff88";
+            const isLast   = i === experience.length - 1;
 
-          {experience.map((item, i) => (
-            <motion.div
-              key={`mob-${i}`}
-              initial={{ opacity: 0, x: -16 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.2 + i * 0.12, duration: 0.45 }}
-              className="relative flex items-stretch gap-4 mb-6 last:mb-0 pl-10"
-            >
-              {/* Dot — centred on the track */}
-              <div className="absolute left-1.5 top-5 -translate-x-1/2">
-                <div className="w-4 h-4 rounded-full bg-dark-base border-2 border-cyber-green flex items-center justify-center shadow-cyber z-10">
-                  <div className="w-1.5 h-1.5 rounded-full bg-cyber-green" />
+            return (
+              <motion.div
+                key={`mob-${i}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.15 + i * 0.1, duration: 0.45 }}
+                /* Two-column flex: gutter + card */
+                className="flex gap-0 items-stretch"
+                style={{ marginBottom: isLast ? 0 : "1.25rem" }}
+              >
+                {/* ── Left gutter: track + dot ── */}
+                <div className="flex flex-col items-center flex-shrink-0 w-10">
+                  {/* Top connector — hidden on first item so track starts at dot */}
+                  <div
+                    className="w-px flex-none"
+                    style={{
+                      height: "20px",               /* ~half card-top padding */
+                      background: i === 0
+                        ? "transparent"
+                        : "linear-gradient(to bottom, #1a2035, #1a2035)",
+                    }}
+                  />
+
+                  {/* Dot */}
+                  <div
+                    className="rounded-full flex-shrink-0 flex items-center justify-center bg-dark-base border-2 z-10"
+                    style={{
+                      width: "18px",
+                      height: "18px",
+                      borderColor: dotColor,
+                      boxShadow: `0 0 8px ${dotColor}70`,
+                      flexShrink: 0,
+                    }}
+                  >
+                    <div
+                      className="rounded-full"
+                      style={{ width: "7px", height: "7px", background: dotColor }}
+                    />
+                  </div>
+
+                  {/* Bottom connector — draw line down to next item, hidden on last */}
+                  {!isLast && (
+                    <div
+                      className="w-px flex-1 mt-1"
+                      style={{
+                        minHeight: "24px",
+                        background:
+                          "linear-gradient(to bottom, #1a2035 0%, #1a2035 100%)",
+                      }}
+                    />
+                  )}
                 </div>
-              </div>
 
-              {/* Card */}
-              <div className="w-full">
-                <TimelineCard item={item} i={i} inView={inView} />
-              </div>
-            </motion.div>
-          ))}
+                {/* ── Right column: card ── */}
+                <div className="flex-1 min-w-0 pb-0">
+                  <TimelineCard item={item} i={i} inView={inView} />
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* ─────────────────────────────────────────────────────
+        {/* ═══════════════════════════════════════════════════════
             DESKTOP LAYOUT  (≥ md)
-            Alternating left / right, timeline line in center
-        ───────────────────────────────────────────────────── */}
+            Alternating left / right, timeline line in centre
+        ═══════════════════════════════════════════════════════ */}
         <div className="relative max-w-3xl mx-auto hidden md:block">
-          {/* Vertical line — center */}
+          {/* Centre vertical line */}
           <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-px bg-dark-border overflow-hidden">
             <motion.div
               className="w-full bg-gradient-to-b from-cyber-green via-cyber-blue to-neon-purple"
@@ -154,7 +203,8 @@ export default function Experience() {
           </div>
 
           {experience.map((item, i) => {
-            const isLeft = i % 2 === 0;
+            const isLeft   = i % 2 === 0;
+            const dotColor = DOT_COLORS[item.type] ?? "#00ff88";
             return (
               <motion.div
                 key={`desk-${i}`}
@@ -165,12 +215,12 @@ export default function Experience() {
                   isLeft ? "flex-row" : "flex-row-reverse"
                 }`}
               >
-                {/* Dot — pinned to center line */}
-                <div className="absolute left-1/2 -translate-x-1/2 top-3">
-                  <TimelineDot />
+                {/* Dot pinned to centre */}
+                <div className="absolute left-1/2 -translate-x-1/2 top-4 z-10">
+                  <TimelineDot color={dotColor} />
                 </div>
 
-                {/* Card — 45% width, pushed to correct side */}
+                {/* Card — 45% wide, pushed to the correct side */}
                 <div className={`w-[45%] ${isLeft ? "mr-auto pr-6" : "ml-auto pl-6"}`}>
                   <TimelineCard item={item} i={i} inView={inView} />
                 </div>
@@ -178,6 +228,7 @@ export default function Experience() {
             );
           })}
         </div>
+
       </div>
     </section>
   );

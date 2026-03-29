@@ -27,6 +27,7 @@ export const skills = {
     { name: "Python", level: 90 },
     { name: "Java", level: 90},
     { name: "OOPS", level: 50},
+    { name: "DSA", level: 10},
     { name: "Bash/Shell", level: 20},
     { name: "JavaScript", level: 30 },
     { name: "SQL", level: 40 },
@@ -51,6 +52,7 @@ export const projects = [
     tags: ["WiFi", "Recon", "Network Security", "Wireless Security"],
     github: "https://github.com/rohiths9814-cmd/wifi_scanner_mini_project.git",
     demo: "https://drive.google.com/file/d/1Xcmz0mtVpsYshfdbUf8SMWRt8OVhotps/view",
+    demoFile: "/demo/wifi_scanner.mp4",   // set to e.g. "/demo/wifi-scanner.mp4" after uploading
     featured: true,
     color: "cyber-green",
   },
@@ -63,6 +65,7 @@ export const projects = [
     tags: ["XSS", "Web Security", "Labs"],
     github: "https://github.com/rohiths9814-cmd",
     demo: null,
+    demoFile: null as string | null,   // set to e.g. "/demo/xss-lab.mp4" after uploading
     featured: true,
     color: "cyber-blue",
   },
