@@ -50,7 +50,7 @@ export const projects = [
     tech: ["Python", "Networking"],
     tags: ["WiFi", "Recon", "Network Security", "Wireless Security"],
     github: "https://github.com/rohiths9814-cmd/wifi_scanner_mini_project.git",
-    demo: "https://drive.google.com/drive/folders/1oIZbHqatznShHdV8GaLr19CGhOzV3LJ5?usp=sharing",
+    demo: "https://drive.google.com/file/d/1Xcmz0mtVpsYshfdbUf8SMWRt8OVhotps/view",
     featured: true,
     color: "cyber-green",
   },
