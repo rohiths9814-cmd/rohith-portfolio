@@ -66,54 +66,6 @@ export const projects = [
     featured: true,
     color: "cyber-blue",
   },
-  {
-    id: 3,
-    title: "SQLi Exploitation Framework",
-    description:
-      "Educational SQL injection testing framework built from scratch. Supports error-based, blind, and time-based injection with automated payload generation against test targets.",
-    tech: ["Python", "MySQL", "SQLite", "Click CLI"],
-    tags: ["SQLi", "Database", "Automation"],
-    github: "https://github.com/rohiths9814-cmd",
-    demo: null,
-    featured: false,
-    color: "neon-purple",
-  },
-  {
-    id: 4,
-    title: "Metasploitable Engagement Report",
-    description:
-      "Full penetration testing engagement against Metasploitable 2 environment. Complete with reconnaissance, exploitation, privilege escalation, and professional PDF report.",
-    tech: ["Metasploit", "Nmap", "Kali Linux", "LaTeX"],
-    tags: ["Red Team", "Full Engagement", "Reporting"],
-    github: "https://github.com/rohiths9814-cmd",
-    demo: null,
-    featured: true,
-    color: "neon-pink",
-  },
-  {
-    id: 5,
-    title: "Network Packet Analyzer",
-    description:
-      "Custom packet capture and analysis tool using Scapy. Detects anomalous traffic patterns, ARP spoofing attempts, and suspicious DNS queries in real-time.",
-    tech: ["Python", "Scapy", "Wireshark", "Linux"],
-    tags: ["Network", "DFIR", "Detection"],
-    github: "https://github.com/rohiths9814-cmd",
-    demo: null,
-    featured: false,
-    color: "cyber-green",
-  },
-  {
-    id: 6,
-    title: "CTF Writeup Collection",
-    description:
-      "Curated collection of detailed CTF challenge writeups covering crypto, web, pwn, and forensics categories from platforms like HackTheBox, TryHackMe, and PicoCTF.",
-    tech: ["Python", "GDB", "Ghidra", "CyberChef"],
-    tags: ["CTF", "HackTheBox", "TryHackMe"],
-    github: "https://github.com/rohiths9814-cmd",
-    demo: null,
-    featured: false,
-    color: "cyber-blue",
-  },
 ];
 
 export const experience = [
