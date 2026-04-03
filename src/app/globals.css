@@ -47,6 +47,15 @@
     80% { transform: translate(2px, -2px); }
     100% { transform: translate(0); }
   }
+  @keyframes neonBorderSpin {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes scanlineMove {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
 }
 
 /* Base reset */
@@ -59,7 +68,6 @@
 html {
   scroll-behavior: smooth;
   font-family: var(--font-sans);
-  /* Improve text rendering */
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
@@ -71,14 +79,12 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Improved line height for readability */
   line-height: 1.6;
   letter-spacing: -0.01em;
 }
 
 /* ─── Typography improvements ─── */
 
-/* Display headings: tighter tracking, heavier weight */
 h1, h2, h3 {
   letter-spacing: -0.025em;
   font-weight: 800;
@@ -90,13 +96,11 @@ h4, h5, h6 {
   font-weight: 600;
 }
 
-/* Body text: comfortable reading measure */
 p {
   line-height: 1.75;
   color: #94a3b8;
 }
 
-/* Mono text: extra crisp */
 code, pre, .font-mono {
   font-family: var(--font-mono);
   font-feature-settings: "liga" 1, "calt" 1;
@@ -220,6 +224,7 @@ code, pre, .font-mono {
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
   font-family: var(--font-mono);
   font-size: 0.8rem;
+  position: relative;
 }
 
 .terminal-header {
@@ -289,50 +294,117 @@ code, pre, .font-mono {
   background: radial-gradient(ellipse at center, rgba(0,255,136,0.08) 0%, transparent 70%);
 }
 
-/* ─── Mobile overrides ─── */
-@media (max-width: 768px) {
-  /* Layout */
-  .section-padding { padding: 72px 0; }
-  .container-custom { padding: 0 16px; }
-
-  /* Typography: prevent text from being too large on small screens */
-  .section-header {
-    font-size: clamp(1.75rem, 8vw, 2.5rem);
-    letter-spacing: -0.03em;
-  }
-
-  /* Terminal: make it scroll horizontally on mobile */
-  .terminal-window {
-    font-size: 0.72rem;
-  }
-  .terminal-window pre {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Buttons: slightly smaller, still tappable (min 44px touch target) */
-  .cyber-btn {
-    padding: 10px 20px;
-    font-size: 0.8rem;
-    min-height: 44px;
-  }
-
-  /* Glass cards: tighter padding on mobile, disable lift */
-  .glass-card:hover {
-    transform: none;
-  }
-
-  /* Tag chips: readable */
-  .tag-chip { font-size: 0.65rem; }
-
-  /* Scrollbar: wider touch target */
-  ::-webkit-scrollbar { width: 2px; }
+/* ─────────────────────────────────────────────────
+   CRT Scanline overlay — Hero
+───────────────────────────────────────────────── */
+.crt-scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 136, 0.015) 2px,
+    rgba(0, 255, 136, 0.015) 4px
+  );
+}
+.crt-scanlines::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 255, 136, 0.03) 50%
+  );
+  background-size: 100% 4px;
+  animation: scanlineMove 8s linear infinite;
+  opacity: 0.5;
 }
 
-@media (max-width: 480px) {
-  .section-padding { padding: 60px 0; }
-  .container-custom { padding: 0 14px; }
-  .section-header { font-size: clamp(1.6rem, 9vw, 2.2rem); }
+/* ─────────────────────────────────────────────────
+   CRT Scanline overlay — Terminal (subtler)
+───────────────────────────────────────────────── */
+.crt-scanlines-terminal {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 255, 136, 0.008) 1px,
+    rgba(0, 255, 136, 0.008) 2px
+  );
+  border-radius: 8px;
+}
+
+/* ─────────────────────────────────────────────────
+   Terminal 3D Perspective wrapper
+───────────────────────────────────────────────── */
+.terminal-3d-wrapper {
+  perspective: 1200px;
+}
+.terminal-3d-wrapper > .terminal-window {
+  transform: rotateX(2deg);
+  transition: transform 0.4s ease;
+}
+.terminal-3d-wrapper:hover > .terminal-window {
+  transform: rotateX(0deg);
+}
+
+/* ─────────────────────────────────────────────────
+   Terminal Neon glow border
+───────────────────────────────────────────────── */
+.terminal-neon-border {
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+.terminal-neon-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 9px;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(0,255,136,0.4),
+    rgba(0,212,255,0.4),
+    rgba(191,90,242,0.4),
+    rgba(0,255,136,0.4)
+  );
+  background-size: 300% 300%;
+  animation: neonBorderSpin 6s ease-in-out infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─────────────────────────────────────────────────
+   Security Dashboard panels
+───────────────────────────────────────────────── */
+.security-panel {
+  position: relative;
+  background: rgba(10, 15, 30, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 255, 136, 0.1);
+  border-radius: 16px;
+  padding: 24px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.security-panel:hover {
+  border-color: rgba(0, 255, 136, 0.3);
+  box-shadow: 0 8px 40px var(--panel-glow, rgba(0,255,136,0.08));
+  transform: translateY(-3px);
 }
 
 /* ─────────────────────────────────────────────────
@@ -366,12 +438,10 @@ code, pre, .font-mono {
 }
 
 .flip-card-front {
-  /* sits at 0deg — the default visible face */
   transform: rotateY(0deg);
 }
 
 .flip-card-back {
-  /* pre-rotated 180deg, becomes visible when inner is flipped */
   transform: rotateY(180deg);
 }
 
@@ -430,7 +500,6 @@ code, pre, .font-mono {
 
 /* ─────────────────────────────────────────────────
    Demo button — base resets
-   (colours applied inline per project accent)
 ───────────────────────────────────────────────── */
 .demo-btn {
   cursor: pointer;
@@ -443,7 +512,6 @@ code, pre, .font-mono {
    Contact section — form card, inputs, social cards
 ───────────────────────────────────────────────── */
 
-/* Main form card */
 .contact-form-card {
   background: rgba(10, 15, 30, 0.85);
   backdrop-filter: blur(24px);
@@ -458,7 +526,6 @@ code, pre, .font-mono {
   border-color: rgba(0, 255, 136, 0.25);
 }
 
-/* Info / social info card */
 .contact-info-card {
   background: rgba(10, 15, 30, 0.8);
   backdrop-filter: blur(20px);
@@ -469,14 +536,12 @@ code, pre, .font-mono {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* Form field group */
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* Label */
 .form-label {
   display: flex;
   align-items: center;
@@ -489,7 +554,6 @@ code, pre, .font-mono {
   font-family: var(--font-mono);
 }
 
-/* Input / textarea */
 .form-input {
   width: 100%;
   background: rgba(5, 8, 16, 0.7);
@@ -514,7 +578,6 @@ code, pre, .font-mono {
   border-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Submit button */
 .submit-btn {
   display: inline-flex;
   align-items: center;
@@ -553,7 +616,6 @@ code, pre, .font-mono {
   transform: none;
 }
 
-/* Social link card */
 .social-link-card {
   display: flex;
   flex-direction: column;
@@ -573,8 +635,60 @@ code, pre, .font-mono {
   transform: translateY(-3px);
 }
 
-/* Mobile contact overrides */
+/* ─── Mobile overrides ─── */
 @media (max-width: 768px) {
+  .section-padding { padding: 72px 0; }
+  .container-custom { padding: 0 16px; }
+
+  .section-header {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+    letter-spacing: -0.03em;
+  }
+
+  .terminal-window {
+    font-size: 0.72rem;
+  }
+  .terminal-window pre {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .cyber-btn {
+    padding: 10px 20px;
+    font-size: 0.8rem;
+    min-height: 44px;
+  }
+
+  .glass-card:hover {
+    transform: none;
+  }
+
+  .tag-chip { font-size: 0.65rem; }
+
+  ::-webkit-scrollbar { width: 2px; }
+
+  /* Disable 3D tilt on mobile */
+  .tilt-card {
+    transform: none !important;
+  }
+
+  /* Disable terminal 3D perspective on mobile */
+  .terminal-3d-wrapper {
+    perspective: none;
+  }
+  .terminal-3d-wrapper > .terminal-window {
+    transform: none;
+  }
+  .terminal-3d-wrapper:hover > .terminal-window {
+    transform: none;
+  }
+
+  /* Security panel: no lift */
+  .security-panel:hover {
+    transform: none;
+  }
+
+  /* Contact overrides */
   .contact-form-card {
     padding: 24px 20px;
     border-radius: 16px;
@@ -591,3 +705,8 @@ code, pre, .font-mono {
   }
 }
 
+@media (max-width: 480px) {
+  .section-padding { padding: 60px 0; }
+  .container-custom { padding: 0 14px; }
+  .section-header { font-size: clamp(1.6rem, 9vw, 2.2rem); }
+}

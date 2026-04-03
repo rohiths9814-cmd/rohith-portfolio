@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform } from "framer-motion";
 import { Terminal, ChevronDown, Shield, Download, ArrowRight } from "lucide-react";
 import dynamic from "next/dynamic";
 import { personalInfo } from "@/data/portfolio";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
+/* ── Lazy-loaded 3D / FX components ────────────────────────── */
+const ParticleNetwork = dynamic(() => import("@/components/3d/ParticleNetwork"), {
+  ssr: false,
+});
 const MatrixRain = dynamic(() => import("@/components/fx/MatrixRain"), {
   ssr: false,
 });
@@ -23,7 +28,25 @@ export default function Hero() {
   const [displayed, setDisplayed] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [charIdx, setCharIdx] = useState(0);
+  const isMobile = useIsMobile();
 
+  /* ── Mouse parallax for text ── */
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const textX = useTransform(mouseX, [-1, 1], [-8, 8]);
+  const textY = useTransform(mouseY, [-1, 1], [-6, 6]);
+
+  useEffect(() => {
+    if (isMobile) return;
+    const handle = (e: MouseEvent) => {
+      mouseX.set((e.clientX / window.innerWidth) * 2 - 1);
+      mouseY.set((e.clientY / window.innerHeight) * 2 - 1);
+    };
+    window.addEventListener("mousemove", handle, { passive: true });
+    return () => window.removeEventListener("mousemove", handle);
+  }, [isMobile, mouseX, mouseY]);
+
+  /* ── Typewriter effect ── */
   const typewrite = useCallback(() => {
     const current = TITLES[titleIndex];
     if (!isDeleting && charIdx < current.length) {
@@ -55,8 +78,8 @@ export default function Hero() {
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg"
     >
-      {/* Matrix rain background */}
-      <MatrixRain />
+      {/* 3D Particle Network (desktop) / Matrix Rain (mobile) */}
+      {isMobile ? <MatrixRain /> : <ParticleNetwork />}
 
       {/* Radial glow */}
       <div className="absolute inset-0 bg-hero-gradient pointer-events-none" aria-hidden />
@@ -69,8 +92,14 @@ export default function Hero() {
         aria-hidden
       />
 
+      {/* CRT Scanline overlay */}
+      <div className="crt-scanlines" aria-hidden />
+
       {/* Content */}
-      <div className="container-custom relative z-10 text-center">
+      <motion.div
+        className="container-custom relative z-10 text-center"
+        style={isMobile ? {} : { x: textX, y: textY }}
+      >
         {/* Status badge */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -168,7 +197,7 @@ export default function Hero() {
             </div>
           ))}
         </motion.div>
-      </div>
+      </motion.div>
 
       {/* Scroll hint */}
       <motion.button

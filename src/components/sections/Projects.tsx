@@ -6,6 +6,8 @@ import { Code2, ExternalLink, Lock, Filter, Play, X, RotateCcw } from "lucide-re
 import { projects } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 import FlipCard from "@/components/FlipCard";
+import TiltCard from "@/components/3d/TiltCard";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 type FilterType = "All" | "Web Security" | "Tools" | "Labs" | "CTF";
 const FILTERS: FilterType[] = ["All", "Web Security", "Tools", "Labs", "CTF"];
@@ -104,7 +106,7 @@ function DemoBackFace({
             src={project.demoFile as string}
             controls
             playsInline
-            preload="none"  // lazy load — only loads on interaction
+            preload="none"
             className="w-full h-full object-contain rounded"
             style={{ maxHeight: "200px" }}
           >
@@ -254,15 +256,13 @@ function ProjectFront({
           ))}
         </div>
 
-        {/* Demo button — Option C: flip if demoFile, else open external link */}
+        {/* Demo button */}
         {hasDemoAction && (
           <button
             onClick={() => {
               if (project.demoFile) {
-                // Local media → flip card
                 onDemoClick();
               } else if (project.demo) {
-                // External link → open in new tab
                 window.open(project.demo, "_blank", "noopener,noreferrer");
               }
             }}
@@ -308,6 +308,7 @@ export default function Projects() {
   const [flippedId, setFlippedId] = useState<number | null>(null);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const isMobile = useIsMobile();
 
   const filtered = projects.filter((p) =>
     tagMatchesFilter(p.tags, activeFilter)
@@ -317,7 +318,6 @@ export default function Projects() {
     setFlippedId((prev) => (prev === id ? null : id));
   }, []);
 
-  // If filter changes, close any open card
   const handleFilterChange = (f: FilterType) => {
     setFlippedId(null);
     setActiveFilter(f);
@@ -371,26 +371,31 @@ export default function Projects() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 exit={{ opacity: 0, scale: 0.92 }}
                 transition={{ delay: i * 0.08, duration: 0.4 }}
-                // Fixed height so FlipCard has room to render both faces
                 className="relative"
                 style={{ minHeight: "360px" }}
               >
-                <FlipCard
-                  isFlipped={flippedId === project.id}
+                <TiltCard
+                  glowColor={ACCENT_HEX[project.color] ?? "#00ff88"}
+                  disabled={isMobile}
                   className="w-full h-full"
-                  front={
-                    <ProjectFront
-                      project={project}
-                      onDemoClick={() => handleFlip(project.id)}
-                    />
-                  }
-                  back={
-                    <DemoBackFace
-                      project={project}
-                      onClose={() => setFlippedId(null)}
-                    />
-                  }
-                />
+                >
+                  <FlipCard
+                    isFlipped={flippedId === project.id}
+                    className="w-full h-full"
+                    front={
+                      <ProjectFront
+                        project={project}
+                        onDemoClick={() => handleFlip(project.id)}
+                      />
+                    }
+                    back={
+                      <DemoBackFace
+                        project={project}
+                        onClose={() => setFlippedId(null)}
+                      />
+                    }
+                  />
+                </TiltCard>
               </motion.div>
             ))}
           </AnimatePresence>

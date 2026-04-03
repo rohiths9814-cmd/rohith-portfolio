@@ -284,94 +284,99 @@ export default function TerminalSection() {
           </p>
         </motion.div>
 
-        {/* Terminal window — centered */}
+        {/* Terminal window — with 3D perspective */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3 }}
-          className="terminal-window max-w-3xl mx-auto select-none"
+          className="terminal-3d-wrapper max-w-3xl mx-auto"
         >
-          {/* Titlebar */}
-          <div className="terminal-header">
-            <div className="terminal-dot bg-[#ff5f57]" />
-            <div className="terminal-dot bg-[#febc2e]" />
-            <div className="terminal-dot bg-[#28c840]" />
-            <span className="ml-3 text-xs text-slate-500 font-mono">
-              rohith@portfolio — interactive shell
-            </span>
-            <span className="ml-auto text-xs text-cyber-green/60 font-mono animate-pulse">
-              ● ONLINE
-            </span>
-          </div>
+          <div className="terminal-window terminal-neon-border select-none">
+            {/* CRT overlay */}
+            <div className="crt-scanlines-terminal" aria-hidden />
 
-          {/* Scrollable body */}
-          <div
-            ref={bodyRef}
-            className="p-5 font-mono text-sm leading-relaxed overflow-y-auto"
-            style={{ minHeight: "380px", maxHeight: "480px" }}
-          >
-            {/* History lines */}
-            {history.map((line, i) => {
-              if (line.type === "cmd") {
+            {/* Titlebar */}
+            <div className="terminal-header">
+              <div className="terminal-dot bg-[#ff5f57]" />
+              <div className="terminal-dot bg-[#febc2e]" />
+              <div className="terminal-dot bg-[#28c840]" />
+              <span className="ml-3 text-xs text-slate-500 font-mono">
+                rohith@portfolio — interactive shell
+              </span>
+              <span className="ml-auto text-xs text-cyber-green/60 font-mono animate-pulse">
+                ● ONLINE
+              </span>
+            </div>
+
+            {/* Scrollable body */}
+            <div
+              ref={bodyRef}
+              className="p-5 font-mono text-sm leading-relaxed overflow-y-auto"
+              style={{ minHeight: "380px", maxHeight: "480px" }}
+            >
+              {/* History lines */}
+              {history.map((line, i) => {
+                if (line.type === "cmd") {
+                  return (
+                    <div key={i} className="flex gap-2 mt-2">
+                      <span className="text-slate-500 select-none flex-shrink-0">
+                        <span className="text-cyber-green">rohith</span>
+                        <span className="text-slate-400">@portfolio</span>
+                        <span className="text-white">:~</span>
+                        <span className="text-cyber-blue">#</span>
+                        <span className="text-white"> </span>
+                      </span>
+                      <span className="text-cyber-green break-all">{line.text}</span>
+                    </div>
+                  );
+                }
+                if (line.type === "err") {
+                  return (
+                    <div key={i} className="text-neon-pink pl-2 mt-0.5">
+                      {line.text}
+                    </div>
+                  );
+                }
+                if (line.type === "info") {
+                  return (
+                    <div key={i} className="text-cyber-blue pl-2 mt-0.5 whitespace-pre">
+                      {line.text}
+                    </div>
+                  );
+                }
+                /* "out" */
                 return (
-                  <div key={i} className="flex gap-2 mt-2">
-                    <span className="text-slate-500 select-none flex-shrink-0">
-                      <span className="text-cyber-green">rohith</span>
-                      <span className="text-slate-400">@portfolio</span>
-                      <span className="text-white">:~</span>
-                      <span className="text-cyber-blue">#</span>
-                      <span className="text-white"> </span>
-                    </span>
-                    <span className="text-cyber-green break-all">{line.text}</span>
-                  </div>
-                );
-              }
-              if (line.type === "err") {
-                return (
-                  <div key={i} className="text-neon-pink pl-2 mt-0.5">
+                  <div key={i} className="text-slate-400 pl-2 mt-0.5 whitespace-pre">
                     {line.text}
                   </div>
                 );
-              }
-              if (line.type === "info") {
-                return (
-                  <div key={i} className="text-cyber-blue pl-2 mt-0.5 whitespace-pre">
-                    {line.text}
-                  </div>
-                );
-              }
-              /* "out" */
-              return (
-                <div key={i} className="text-slate-400 pl-2 mt-0.5 whitespace-pre">
-                  {line.text}
-                </div>
-              );
-            })}
+              })}
 
-            {/* Input row */}
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-slate-500 flex-shrink-0 select-none">
-                <span className="text-cyber-green">rohith</span>
-                <span className="text-slate-400">@portfolio</span>
-                <span className="text-white">:~</span>
-                <span className="text-cyber-blue">#</span>
-                <span className="text-white"> </span>
-              </span>
-              <input
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKey}
-                spellCheck={false}
-                autoComplete="off"
-                autoCapitalize="off"
-                aria-label="Terminal input"
-                className="flex-1 bg-transparent text-cyber-green caret-cyber-green outline-none border-none font-mono text-sm min-w-0"
-                style={{ caretColor: "#00ff88" }}
-              />
-              <span className="animate-blink text-cyber-green select-none" aria-hidden>
-                █
-              </span>
+              {/* Input row */}
+              <div className="flex items-center gap-2 mt-2">
+                <span className="text-slate-500 flex-shrink-0 select-none">
+                  <span className="text-cyber-green">rohith</span>
+                  <span className="text-slate-400">@portfolio</span>
+                  <span className="text-white">:~</span>
+                  <span className="text-cyber-blue">#</span>
+                  <span className="text-white"> </span>
+                </span>
+                <input
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKey}
+                  spellCheck={false}
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  aria-label="Terminal input"
+                  className="flex-1 bg-transparent text-cyber-green caret-cyber-green outline-none border-none font-mono text-sm min-w-0"
+                  style={{ caretColor: "#00ff88" }}
+                />
+                <span className="animate-blink text-cyber-green select-none" aria-hidden>
+                  █
+                </span>
+              </div>
             </div>
           </div>
         </motion.div>
