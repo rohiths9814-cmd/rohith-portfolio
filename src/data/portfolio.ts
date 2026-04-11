@@ -57,7 +57,20 @@ export const projects = [
     color: "cyber-green",
   },
   {
-    id: 2,
+  id: 2,
+  title: "Password Strength Analyzer",
+  description:
+    "Built an advanced password strength analyzer that evaluates user passwords in real-time using entropy-based scoring, pattern detection, and security rules. The tool helps users create strong, secure passwords by identifying weaknesses and suggesting improvements.",
+  tech: ["JavaScript", "Cybersecurity", "Web Development", "Entropy Analysis"],
+  tags: ["Password Security","Cybersecurity","Entropy","Web App","Security Tool"],
+  github: "https://github.com/rohiths9814-cmd/Password_Checker",
+  demo: "https://password.rohithsec.in",
+  demoFile: "/demo/Password_Checker.mp4",
+  featured: true,
+  color: "cyber-blue",
+  },
+  {
+    id: 3,
     title: "XSS Hunter Lab",
     description:
       "Custom lab environment for testing and demonstrating Cross-Site Scripting vulnerabilities. Includes DOM-based, Reflected, and Stored XSS scenarios with educational writeups.",
