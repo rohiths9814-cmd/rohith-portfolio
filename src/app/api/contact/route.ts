@@ -20,6 +20,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Debug: Check if env vars exist (remove after fixing)
+    console.log("[Contact API Debug] SMTP_USER exists:", !!process.env.SMTP_USER);
+    console.log("[Contact API Debug] SMTP_PASS exists:", !!process.env.SMTP_PASS);
+    console.log("[Contact API Debug] CONTACT_EMAIL exists:", !!process.env.CONTACT_EMAIL);
+    console.log("[Contact API Debug] SMTP_USER value:", process.env.SMTP_USER ? "set" : "UNDEFINED");
+    console.log("[Contact API Debug] SMTP_PASS value:", process.env.SMTP_PASS ? "set" : "UNDEFINED");
+
     // Import nodemailer
     const nodemailer = await import("nodemailer");
 
