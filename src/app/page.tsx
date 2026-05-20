@@ -8,7 +8,6 @@ import Experience from "@/components/sections/Experience";
 import TerminalSection from "@/components/sections/Terminal";
 import SecurityDashboard from "@/components/sections/SecurityDashboard";
 import Contact from "@/components/sections/Contact";
-import SupportMe from "@/components/sections/SupportMe";
 
 export default function Home() {
   return (
@@ -22,7 +21,6 @@ export default function Home() {
       <TerminalSection />
       <SecurityDashboard />
       <Contact />
-      <SupportMe />
       <Footer />
     </main>
   );

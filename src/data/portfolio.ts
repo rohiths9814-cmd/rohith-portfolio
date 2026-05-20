@@ -163,7 +163,6 @@ export const navLinks = [
   { label: "Terminal", href: "#terminal" },
   { label: "Security", href: "#security" },
   { label: "Contact", href: "#contact" },
-  { label: "Support", href: "#support" },
 ];
 
 export const terminalCommands = [
