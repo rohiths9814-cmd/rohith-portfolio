@@ -46,13 +46,20 @@ export async function POST(req: NextRequest) {
 
     console.log(`📦 Creating order: ${orderId}`);
 
+    // Trim env vars to strip hidden whitespace/carriage returns
+    const clientId = (process.env.CASHFREE_CLIENT_ID || "").trim();
+    const clientSecret = (process.env.CASHFREE_CLIENT_SECRET || "").trim();
+
+    console.log(`🔑 Client ID: ${clientId.substring(0, 8)}... (${clientId.length} chars)`);
+    console.log(`🌐 API URL: ${CASHFREE_BASE_URL}/orders`);
+
     // Call Cashfree API directly
     const response = await fetch(`${CASHFREE_BASE_URL}/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "x-client-id": process.env.CASHFREE_CLIENT_ID!,
-        "x-client-secret": process.env.CASHFREE_CLIENT_SECRET!,
+        "x-client-id": clientId,
+        "x-client-secret": clientSecret,
         "x-api-version": API_VERSION,
       },
       body: JSON.stringify(orderPayload),
